@@ -92,6 +92,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(item(loginItemTitle(), #selector(toggleLogin), on: SMAppService.mainApp.status == .enabled))
         menu.addItem(.separator())
 
+        menu.addItem(header(String(format: L("Version %@"), AppInfo.version)))
+        let website = NSMenuItem(title: L("Dockstep on GitHub…"), action: #selector(openWebsite), keyEquivalent: "")
+        website.target = self
+        menu.addItem(website)
+        menu.addItem(.separator())
+
         let quit = NSMenuItem(title: L("Quit Dockstep (restores normal ⌘⇥)"), action: #selector(quit), keyEquivalent: "q")
         quit.target = self
         menu.addItem(quit)
@@ -158,6 +164,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         } catch {
             showAlert(L("Couldn't change Open at Login"), error.localizedDescription)
         }
+    }
+
+    @objc private func openWebsite() {
+        NSWorkspace.shared.open(AppInfo.website)
     }
 
     @objc private func quit() {

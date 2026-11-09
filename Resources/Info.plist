@@ -23,16 +23,19 @@
     <string>Dockstep</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+    <!-- Both versions are stamped by build.sh: the VERSION file and the git commit count. -->
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>0.0.0-dev</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>0</string>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
     <key>LSUIElement</key>
     <true/>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>NSHumanReadableCopyright</key>
+    <string>© 2026 akitogo · GPL-3.0</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
 </dict>

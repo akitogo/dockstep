@@ -11,15 +11,36 @@ Order shown in the switcher:
 
 ## Install
 
-Requires macOS 13 or later and the Xcode Command Line Tools (`xcode-select --install`).
+Requires macOS 13 or later, on Apple silicon or Intel.
+
+1. Download `Dockstep-<version>.zip` from the [latest release](https://github.com/akitogo/dockstep/releases/latest).
+2. Unzip it and move **Dockstep** to your **Applications** folder.
+3. Open it. Dockstep isn't notarized by Apple yet, so the first time macOS says it can't
+   verify the app. Click **Done**, open **System Settings › Privacy & Security**, scroll down,
+   click **Open Anyway** next to the Dockstep message and confirm. You only need to do this once.
+   (Or in Terminal: `xattr -dr com.apple.quarantine /Applications/Dockstep.app`)
+4. A short welcome message explains the keys; the settings are in its menu bar icon.
+
+Dockstep needs no Accessibility or other permissions. To start it automatically, turn on
+**Open at Login** in its menu bar icon.
+
+### Build it yourself
+
+With the Xcode Command Line Tools (`xcode-select --install`):
 
 ```bash
 ./build.sh --install
 ```
 
-This builds `build/Dockstep.app`, copies it to `/Applications` and starts it. Dockstep
-needs no Accessibility or other permissions. To start it automatically, use
-**Open at Login** in its menu bar icon.
+This builds `build/Dockstep.app`, copies it to `/Applications` and starts it.
+
+### Making a release
+
+1. Set the new version in `VERSION` and add an entry to `CHANGELOG.md`.
+2. Run `./build.sh --release`. It builds for Apple silicon and Intel, signs with your
+   Developer ID certificate, notarizes with Apple (using the notarytool keychain profile
+   `dockstep`) and writes `dist/Dockstep-<version>.zip`.
+3. Tag the commit (`v<version>`) and attach the zip to a GitHub release.
 
 ## Using it
 
@@ -87,3 +108,11 @@ The app icon is drawn in code. To change it, edit `Tools/make-icon.swift` and re
 ```bash
 swiftc Tools/make-icon.swift -o /tmp/make-icon && /tmp/make-icon Resources/AppIcon.icns
 ```
+
+## License
+
+Copyright © 2026 akitogo
+
+Dockstep is free software: you can use, study, share and change it under the terms of the
+[GNU General Public License v3.0](LICENSE). If you distribute it, modified or not, you must
+make the complete source code available under the same license.

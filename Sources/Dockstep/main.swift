@@ -3,6 +3,11 @@ import AppKit
 let arguments = CommandLine.arguments
 
 // `Dockstep --restore-cmd-tab`: turn the built-in switcher back on (e.g. after `kill -9`).
+if arguments.contains("--version") {
+    print("Dockstep \(AppInfo.version) (build \(AppInfo.build))")
+    exit(0)
+}
+
 if arguments.contains("--restore-cmd-tab") {
     NativeCommandTab.setEnabled(true)
     print("Built-in ⌘⇥ is \(NativeCommandTab.isEnabled ? "on" : "still off")")

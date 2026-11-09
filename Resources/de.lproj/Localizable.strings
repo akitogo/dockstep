@@ -24,4 +24,6 @@
 "Also show Dock apps that aren't running" = "Auch Dock-Apps anzeigen, die nicht geöffnet sind";
 "Open at Login" = "Bei der Anmeldung öffnen";
 "Open at Login (allow in System Settings › General › Login Items)" = "Bei der Anmeldung öffnen (erlauben unter Systemeinstellungen › Allgemein › Anmeldeobjekte)";
+"Version %@" = "Version %@";
+"Dockstep on GitHub…" = "Dockstep auf GitHub …";
 "Quit Dockstep (restores normal ⌘⇥)" = "Dockstep beenden (normales ⌘⇥ wiederherstellen)";
