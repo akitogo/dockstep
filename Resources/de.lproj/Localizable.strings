@@ -1,0 +1,27 @@
+/* German translations for Dockstep. The English text is the key. */
+
+/* Alerts */
+"Dockstep can't run on this macOS version" = "Dockstep kann auf dieser macOS-Version nicht ausgeführt werden";
+"The system function for turning off the built-in ⌘⇥ switcher was not found." = "Die Systemfunktion zum Ausschalten des eingebauten ⌘⇥-Umschalters wurde nicht gefunden.";
+"Dockstep is running" = "Dockstep läuft";
+"⌘⇥ now goes through your apps in Dock order.\n\nWhile holding ⌘: Tab / ⇧Tab or ←/→ to move, 1…9 and 0 to jump to a position, Q to quit and H to hide the selected app, Esc to cancel.\n\nSettings are in the menu bar icon." = "⌘⇥ geht jetzt in der Reihenfolge deines Docks durch deine Apps.\n\nBei gedrückter ⌘-Taste: Tab / ⇧Tab oder ←/→ zum Auswählen, 1…9 und 0 springen direkt zu einer Position, Q beendet und H blendet die ausgewählte App aus, Esc bricht ab.\n\nDie Einstellungen findest du über das Symbol in der Menüleiste.";
+"⌘⇥ is already in use" = "⌘⇥ wird bereits verwendet";
+"Another app (for example AltTab) has taken ⌘⇥. Quit it and turn Dockstep on again." = "Eine andere App (zum Beispiel AltTab) verwendet bereits ⌘⇥. Beende sie und schalte Dockstep dann wieder ein.";
+"Couldn't change Open at Login" = "„Bei der Anmeldung öffnen“ konnte nicht geändert werden";
+
+/* Menu */
+"Dockstep: ⌘⇥ in Dock order" = "Dockstep: ⌘⇥ in Dock-Reihenfolge";
+"Use Dock order for ⌘⇥" = "Dock-Reihenfolge für ⌘⇥ verwenden";
+"First ⌘⇥ press selects" = "Erstes ⌘⇥ wählt";
+"The next app after the current one" = "Die nächste App nach der aktuellen";
+"The first app in the Dock (fixed positions)" = "Die erste App im Dock (feste Positionen)";
+"Position numbers (⌘1…⌘0)" = "Positionsnummern (⌘1…⌘0)";
+"Badge on the icon (top right)" = "Als Kennzeichen am Symbol (oben rechts)";
+"Above the icons" = "Über den Symbolen";
+"Below the icons" = "Unter den Symbolen";
+"Hidden (⌘1…⌘0 still work)" = "Ausgeblendet (⌘1…⌘0 funktionieren weiterhin)";
+"Off (⌘1…⌘0 turned off too)" = "Aus (auch ⌘1…⌘0 ausgeschaltet)";
+"Also show Dock apps that aren't running" = "Auch Dock-Apps anzeigen, die nicht geöffnet sind";
+"Open at Login" = "Bei der Anmeldung öffnen";
+"Open at Login (allow in System Settings › General › Login Items)" = "Bei der Anmeldung öffnen (erlauben unter Systemeinstellungen › Allgemein › Anmeldeobjekte)";
+"Quit Dockstep (restores normal ⌘⇥)" = "Dockstep beenden (normales ⌘⇥ wiederherstellen)";

@@ -1,0 +1,89 @@
+# Dockstep
+
+A small menu bar app that makes **⌘⇥ go through your apps in Dock order** instead of
+"most recently used". Everything else about the Dock and the switcher stays as you know it.
+
+Order shown in the switcher:
+
+1. Finder (always first, as in the Dock)
+2. Apps kept in your Dock, in the order you arranged them (rearranging the Dock takes effect immediately)
+3. A divider, then other running apps in the order you opened them
+
+## Install
+
+Requires macOS 13 or later and the Xcode Command Line Tools (`xcode-select --install`).
+
+```bash
+./build.sh --install
+```
+
+This builds `build/Dockstep.app`, copies it to `/Applications` and starts it. Dockstep
+needs no Accessibility or other permissions. To start it automatically, use
+**Open at Login** in its menu bar icon.
+
+## Using it
+
+Hold ⌘ and:
+
+| Key | Does |
+| --- | --- |
+| Tab / ⇧Tab | next / previous app |
+| ← / → | move left / right |
+| 1 … 9, 0 | jump straight to that position and switch |
+| Return | switch now |
+| Q | quit the selected app |
+| H | hide / show the selected app |
+| Esc | cancel |
+
+Release ⌘ to switch to the selected app. You can also hover and click with the mouse.
+
+## Settings (menu bar icon)
+
+- **Use Dock order for ⌘⇥**: turn Dockstep off without quitting (the built-in switcher comes back).
+- **First ⌘⇥ press selects**
+  - *the next app after the current one* (default): one ⌘⇥ moves one step right in the Dock.
+  - *the first app in the Dock*: each app is always the same number of Tab presses away.
+- **Also show Dock apps that aren't running**: keeps the positions fixed even when apps
+  are closed. Picking one opens it.
+- **Position numbers**: for the ⌘-number jump, shown as a small *⌘3 badge* on each icon's
+  top-right corner (default, takes no extra space), as a row *above* or *below* the icons,
+  *hidden* (the ⌘1…⌘0 shortcuts keep working) or *off* (no numbers and no ⌘1…⌘0).
+
+Dockstep is in English and German; it follows the language set in
+System Settings › General › Language & Region. Translations are in
+`Resources/<language>.lproj/Localizable.strings`, with the English text as the key.
+
+## How it works
+
+- The built-in ⌘⇥ is switched off with the private WindowServer function
+  `CGSSetSymbolicHotKeyEnabled`, the same approach [AltTab](https://github.com/lwouis/alt-tab-macos) uses,
+  and ⌘⇥ is registered as a normal global hotkey instead.
+- The Dock order is read from the Dock's own preferences (`com.apple.dock` → `persistent-apps`).
+- Releasing ⌘ is detected by checking the modifier keys while the switcher is open.
+
+## If ⌘⇥ ever stops working
+
+Dockstep turns the built-in switcher back on when you quit it, when it is ended from
+Activity Monitor and when it crashes. Only a forced `kill -9` skips that. In that case, run:
+
+```bash
+/Applications/Dockstep.app/Contents/MacOS/Dockstep --restore-cmd-tab
+```
+
+## Developer commands
+
+```bash
+build/Dockstep.app/Contents/MacOS/Dockstep --print-order          # list apps in switcher order
+build/Dockstep.app/Contents/MacOS/Dockstep --print-order --all    # include Dock apps that aren't running
+build/Dockstep.app/Contents/MacOS/Dockstep --snapshot panel.png   # render the panel to an image
+                                                                # (--dark, --numbers badge|top|bottom|hidden|off)
+build/Dockstep.app/Contents/MacOS/Dockstep --print-menu           # print the menu as text
+build/Dockstep.app/Contents/MacOS/Dockstep --print-menu -AppleLanguages '(en)'   # …in another language
+```
+
+The app icon is drawn in code. To change it, edit `Tools/make-icon.swift` and regenerate
+`Resources/AppIcon.icns`:
+
+```bash
+swiftc Tools/make-icon.swift -o /tmp/make-icon && /tmp/make-icon Resources/AppIcon.icns
+```

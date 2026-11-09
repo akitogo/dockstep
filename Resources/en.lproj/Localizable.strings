@@ -1,0 +1,2 @@
+/* English is the source language: the keys in code are the English texts, so nothing to translate here.
+   This file exists so macOS treats English as a supported language (and falls back to it). */
