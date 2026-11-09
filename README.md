@@ -1,4 +1,19 @@
-# Dockstep
+<p align="center">
+  <img src="docs/icon.png" width="128" height="128" alt="Dockstep app icon">
+</p>
+
+<h1 align="center">Dockstep</h1>
+
+<p align="center">
+  <strong>⌘⇥ in Dock order for macOS</strong><br>
+  <a href="https://github.com/akitogo/dockstep/releases/latest">Download</a> ·
+  macOS 13 or later · Apple silicon and Intel · Free and open source
+</p>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/switcher-dark.png">
+  <img src="docs/switcher-light.png" alt="The Dockstep switcher: Finder, Safari, Mail, Calendar, Notes, Music, Photos and Messages in Dock order with ⌘1 to ⌘8 badges, a divider, then System Settings, Preview and Terminal. Mail is selected.">
+</picture>
 
 A small menu bar app that makes **⌘⇥ go through your apps in Dock order** instead of
 "most recently used". Everything else about the Dock and the switcher stays as you know it.
@@ -96,10 +111,18 @@ Activity Monitor and when it crashes. Only a forced `kill -9` skips that. In tha
 ```bash
 build/Dockstep.app/Contents/MacOS/Dockstep --print-order          # list apps in switcher order
 build/Dockstep.app/Contents/MacOS/Dockstep --print-order --all    # include Dock apps that aren't running
-build/Dockstep.app/Contents/MacOS/Dockstep --snapshot panel.png   # render the panel to an image
+build/Dockstep.app/Contents/MacOS/Dockstep --snapshot panel.png   # render the panel to an image (--demo: Apple apps, --framed: with shadow)
                                                                 # (--dark, --numbers badge|top|bottom|hidden|off)
 build/Dockstep.app/Contents/MacOS/Dockstep --print-menu           # print the menu as text
 build/Dockstep.app/Contents/MacOS/Dockstep --print-menu -AppleLanguages '(en)'   # …in another language
+```
+
+The README screenshots are rendered with standard Apple apps, so they never show your own:
+
+```bash
+B=build/Dockstep.app/Contents/MacOS/Dockstep
+$B --snapshot docs/switcher-light.png --demo --framed --numbers badge -AppleLanguages '(en)'
+$B --snapshot docs/switcher-dark.png --demo --framed --numbers badge --dark -AppleLanguages '(en)'
 ```
 
 The app icon is drawn in code. To change it, edit `Tools/make-icon.swift` and regenerate

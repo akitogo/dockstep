@@ -68,14 +68,36 @@ final class SwitcherPanel {
 
     /// Renders the panel into a PNG (used by `Dockstep --snapshot` to check the layout).
     static func snapshot(items: [SwitchItem], selected: Int, maxWidth: CGFloat,
-                         numberPosition: NumberPosition, dark: Bool) -> Data? {
+                         numberPosition: NumberPosition, dark: Bool, framed: Bool = false) -> Data? {
         let view = SwitcherContentView(items: items, maxWidth: maxWidth, numberPosition: numberPosition,
                                        showRunningDots: Settings.includeNotRunning, solidBackground: true)
         view.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
         view.setSelection(selected)
         guard let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { return nil }
         view.cacheDisplay(in: view.bounds, to: rep)
-        return rep.representation(using: .png, properties: [:])
+        guard framed else { return rep.representation(using: .png, properties: [:]) }
+
+        // Transparent margin with a soft drop shadow, like the panel floating over a window.
+        let margin: CGFloat = 36
+        let size = NSSize(width: view.bounds.width + 2 * margin, height: view.bounds.height + 2 * margin)
+        let scale = CGFloat(rep.pixelsWide) / view.bounds.width
+        guard let canvas = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(size.width * scale),
+                                            pixelsHigh: Int(size.height * scale), bitsPerSample: 8,
+                                            samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                                            colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)
+        else { return nil }
+        canvas.size = size
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: canvas)
+        let shadow = NSShadow()
+        shadow.shadowColor = NSColor.black.withAlphaComponent(dark ? 0.55 : 0.25)
+        shadow.shadowBlurRadius = 22
+        shadow.shadowOffset = NSSize(width: 0, height: -8)
+        shadow.set()
+        rep.draw(in: NSRect(x: margin, y: margin, width: view.bounds.width, height: view.bounds.height),
+                 from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: false, hints: nil)
+        NSGraphicsContext.restoreGraphicsState()
+        return canvas.representation(using: .png, properties: [:])
     }
 }
 
@@ -152,7 +174,7 @@ final class SwitcherContentView: NSView {
             let number = index < 10 ? (index == 9 ? "0" : "\(index + 1)") : nil
             let tile = TileView(frame: NSRect(x: x, y: tilesY, width: cellWidth, height: cellHeight), item: item,
                                 iconSize: iconSize, number: number, numberPosition: numberPosition,
-                                showRunningDot: showRunningDots && item.app != nil)
+                                showRunningDot: showRunningDots && item.isRunning)
             tile.onHover = { [weak self] in self?.onHover?(index) }
             tile.onClick = { [weak self] in self?.onClick?(index) }
             addSubview(tile)
@@ -237,7 +259,7 @@ final class TileView: NSView {
          number: String?, numberPosition: NumberPosition, showRunningDot: Bool) {
         self.name = item.name
         self.icon = item.icon
-        self.iconAlpha = item.app == nil ? 0.45 : 1
+        self.iconAlpha = item.isRunning ? 1 : 0.45
         self.showRunningDot = showRunningDot
         self.numberPosition = numberPosition
         if let number, numberPosition.showsNumber {

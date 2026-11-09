@@ -9,6 +9,8 @@ struct SwitchItem {
     let icon: NSImage
     /// Finder or kept in the Dock (left of the Dock's divider).
     let isPinned: Bool
+    /// Not running apps are drawn dimmed.
+    let isRunning: Bool
 }
 
 /// Builds the switcher list in the same order the Dock shows it:
@@ -80,7 +82,21 @@ enum DockOrder {
     private static func item(for app: NSRunningApplication, pinned: Bool) -> SwitchItem {
         let icon = app.icon ?? app.bundleURL.map { NSWorkspace.shared.icon(forFile: $0.path) } ?? NSImage()
         let name = app.localizedName ?? app.bundleURL.map { displayName(of: $0) } ?? "App"
-        return SwitchItem(app: app, bundleURL: app.bundleURL, name: name, icon: icon, isPinned: pinned)
+        return SwitchItem(app: app, bundleURL: app.bundleURL, name: name, icon: icon, isPinned: pinned, isRunning: true)
+    }
+
+    /// A fixed list of Apple apps every Mac has, for screenshots (`Dockstep --snapshot … --demo`),
+    /// so a README image never shows someone's own apps.
+    static func demoItems() -> [SwitchItem] {
+        let pinned = ["com.apple.finder", "com.apple.Safari", "com.apple.mail", "com.apple.iCal",
+                      "com.apple.Notes", "com.apple.Music", "com.apple.Photos", "com.apple.MobileSMS"]
+        let others = ["com.apple.systempreferences", "com.apple.Preview", "com.apple.Terminal"]
+        func item(_ bundleId: String, pinned: Bool) -> SwitchItem? {
+            guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleId) else { return nil }
+            return SwitchItem(app: nil, bundleURL: url, name: displayName(of: url),
+                              icon: NSWorkspace.shared.icon(forFile: url.path), isPinned: pinned, isRunning: true)
+        }
+        return pinned.compactMap { item($0, pinned: true) } + others.compactMap { item($0, pinned: false) }
     }
 
     private static func item(forNotRunning pinned: PinnedApp) -> SwitchItem? {
@@ -89,7 +105,7 @@ enum DockOrder {
         if url == nil, let pinnedURL = pinned.url, fm.fileExists(atPath: pinnedURL.path) { url = pinnedURL }
         guard let url else { return nil }
         return SwitchItem(app: nil, bundleURL: url, name: displayName(of: url),
-                          icon: NSWorkspace.shared.icon(forFile: url.path), isPinned: true)
+                          icon: NSWorkspace.shared.icon(forFile: url.path), isPinned: true, isRunning: false)
     }
 
     private static func displayName(of url: URL) -> String {
