@@ -73,7 +73,8 @@ if [[ "$MODE" == "--release" ]]; then
     mkdir -p dist
     ZIP="dist/Dockstep-$VERSION.zip"
     rm -f "$ZIP"
-    ditto -c -k --keepParent "$APP" "$ZIP"
+    # --noextattr/--norsrc: leave out local file attributes, which other unzip tools show as "._" files.
+    ditto -c -k --noextattr --norsrc --keepParent "$APP" "$ZIP"
 
     PROFILE="${NOTARY_PROFILE:-dockstep}"
     if [[ "$IDENTITY" == "-" ]]; then
@@ -85,7 +86,7 @@ if [[ "$MODE" == "--release" ]]; then
         xcrun notarytool submit "$ZIP" --keychain-profile "$PROFILE" --wait
         xcrun stapler staple "$APP"
         rm -f "$ZIP"
-        ditto -c -k --keepParent "$APP" "$ZIP"
+        ditto -c -k --noextattr --norsrc --keepParent "$APP" "$ZIP"
         spctl --assess --type execute --verbose=2 "$APP"
     else
         echo "note: signed but not notarized: no notarytool profile \"$PROFILE\" found." >&2
